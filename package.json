@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node run.js",
     "dev": "node run.js",
-    "build": "electron-builder --win"
+    "build": "electron-builder --win portable"
   },
   "author": "",
   "license": "MIT",
@@ -35,13 +35,9 @@
       "node_modules/**/*"
     ],
     "win": {
-      "target": "nsis",
-      "icon": "图标.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
+      "target": "portable",
+      "icon": "图标.png",
+      "signAndEditExecutable": false
     }
   }
 }
