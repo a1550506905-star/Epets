@@ -1,0 +1,45 @@
+{
+  "id": "kyojuro-rengoku",
+  "displayName": "炼狱杏寿郎",
+  "description": "漫画《鬼灭之刃》及其衍生作品中的角色，出生于猎鬼家族炼狱家，是鬼杀队中的炎柱。炼狱杏寿郎是一位气势十足且性格开朗的人，时常保持微笑的杏寿郎也喜欢照顾他人。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 1000
+}

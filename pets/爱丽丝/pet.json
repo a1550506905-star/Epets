@@ -1,0 +1,45 @@
+{
+  "id": "Aerith Gainsborough 2",
+  "displayName": "爱丽丝",
+  "description": "爱丽丝·盖恩斯巴勒，是日本史克威尔公司旗下作品《最终幻想Ⅶ》系列中的女主角之一，性格与外表不同，积极大胆，活泼开朗，乐观幽默，有点喜欢小恶作剧，调皮又充满活力，情感细腻温柔。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

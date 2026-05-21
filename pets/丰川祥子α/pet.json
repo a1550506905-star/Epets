@@ -1,0 +1,45 @@
+{
+  "id": "sakiko",
+  "displayName": "丰川祥子",
+  "description": "丰川祥子，艺名为Oblivionis，女，生日2月14日，是日本二次元少女乐队企划《BanG Dream!》及其衍生动画作品《BanG Dream! It's MyGO!!!!!》《BanG Dream! Ave Mujica》以及游戏作品《BanG Dream! 交织的乐章》中的角色，是羽丘女子学园的高中一年级生，丰川集团的千金，说话带着大小姐腔调，经常在学校音乐教室弹奏古典钢琴乐曲，曾是CRYCHIC的键盘手，后在Ave Mujica担任键盘手兼队长 。丰川祥子和若叶睦青梅竹马.",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 1000
+}

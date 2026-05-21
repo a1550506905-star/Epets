@@ -1,0 +1,45 @@
+{
+  "id": "Herta",
+  "displayName": "大黑塔",
+  "description": "米哈游出品的游戏《崩坏：星穹铁道》及其衍生作品中的角色，“天才俱乐部”#83会员，空间站“黑塔”真正的主人。身为湛蓝星智商最高的人类，只做自己感兴趣的事，一旦失去兴趣就立刻走人——空间站就是最好的例子 [10]。不满足于寻常世界的万物法则，她将目光投向了银河中未解的存在，并期待那些遥远的神秘能够满足自己的好奇心。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

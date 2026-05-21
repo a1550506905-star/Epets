@@ -1,0 +1,45 @@
+{
+  "id": "BB",
+  "displayName": "2B",
+  "description": "是《尼尔：机械纪元》主人公之一，是游戏剧情的核心人物，也是玩家角色能操纵的角色之一。尤尔哈2B是人类所派遣的作为步兵团成员的泛用战斗型机器人，外表为女性，因为她总是戴着大大眼罩，所以只能看到一点点脸。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

@@ -1,0 +1,45 @@
+{
+  "id": "Fluttershy",
+  "displayName": "小蝶",
+  "description": "是美国动画《小马宝莉》（My Little Pony: Friendship Is Magic）及其衍生作品中的角色，是一匹雌性天马，是主角团队“六小马”之一。小蝶拥有米黄色的身体，粉红色的鬃毛和尾巴，性格善良温柔，害羞内向，勇敢坚强，拥有飞翔和与动物沟通的能力。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

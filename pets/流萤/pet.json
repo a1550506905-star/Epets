@@ -1,0 +1,45 @@
+{
+  "id": "Firefly",
+  "displayName": "流萤",
+  "description": "米哈游出品的游戏《崩坏：星穹铁道》及其衍生作品中的角色。“星核猎手”的成员，身着机械装甲“萨姆”的少女。以兵器的身份诞生，因基因改造罹患“失熵”的痛苦。为寻求生命的意义加入星核猎手，不断追逐违抗命运的方式。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

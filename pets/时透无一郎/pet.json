@@ -1,0 +1,45 @@
+{
+  "id": "Tokitou Muichirou",
+  "displayName": "时透无一郎",
+  "description": "时透无一郎，漫画《鬼灭之刃》及其衍生作品中的角色。鬼杀队中的霞柱，无一郎是仅用两个月就成为柱的天才少年，其祖先继国岩胜为初代呼吸法剑士。在刀匠村一战中，无一郎不仅开启了斑纹，也成功恢复记忆。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 8,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 8,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 8,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 8,
+      "interval": 200
+    },
+    "running": {
+      "frames": 8,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 8,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

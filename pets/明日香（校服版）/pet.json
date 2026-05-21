@@ -1,0 +1,45 @@
+{
+  "id": "Asuka Langley Soryu jk",
+  "displayName": "明日香（校服版）",
+  "description": "惣流·明日香·兰格雷，日本动画《新世纪福音战士》女主角之一。好胜心强，以EVA王牌驾驶员自居。脾气极端火爆，且刁蛮任性，无法容忍比自己优秀的存在。在面对喜欢的人时，则率性而娇俏。（此为穿着校服的日常版）",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 1500
+}

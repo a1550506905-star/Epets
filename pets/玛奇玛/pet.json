@@ -1,0 +1,45 @@
+{
+  "id": "Makima",
+  "displayName": "玛奇玛",
+  "description": "玛奇玛，日本漫画《链锯人》及其衍生作品中的角色。内阁直属的恶魔猎人，真实身份为支配恶魔。崇拜着链锯人，是唯一一位知晓被链锯人吞噬的恶魔的存在的人。是她将能变成链锯人的电次带入公安。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

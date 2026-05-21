@@ -1,0 +1,45 @@
+{
+  "id": "Deidara",
+  "displayName": "迪达拉",
+  "description": "日本漫画《火影忍者》及其衍生作品中的角色。原为岩隐村第三代土影大野木弟子及黑土师兄，少年时期为证明自身艺术理念主动策划多起恐怖袭击，12岁败于宇智波鼬后加入“晓”组织并获“青龙”代号。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

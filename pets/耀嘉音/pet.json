@@ -1,0 +1,45 @@
+{
+  "id": "Astra Yao",
+  "displayName": "耀嘉音",
+  "description": "耀嘉音，游戏《绝区零》中的S级以太属性支援角色。才华横溢的音乐明星。同时也是公认的丽都第一歌姬。聚光灯下的耀嘉音，自信耀眼，散发着宛如女王般的气场。就像是在武道上登峰造极的强者，也曾获得过这样的评价。聚光灯外的耀嘉音，更像是个好奇心旺盛的普通女孩。为了在不想工作的时候翘班出门，总会与经纪人伊芙琳斗智斗勇，设计出了诸多逃跑路线。由于生活中的耀嘉音与舞台上的女王气场反差较大，在翘班出门遇到粉丝时，总会被认为是还原度超高的coser",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

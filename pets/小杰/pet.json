@@ -1,0 +1,45 @@
+{
+  "id": "GON·FREECSS",
+  "displayName": "小杰",
+  "description": "日本漫画《全职猎人》及其衍生作品中的男主角。隶属于猎人协会的职业猎人。金·富力士的儿子，奇犽·揍敌客的好友。为了寻找父亲而立志成为猎人。从小就在鲸鱼岛上玩耍所以身手敏捷五种感官特别敏锐，可和动物沟通。在参加猎人试验时和奇犽、酷拉皮卡和雷欧力成为好友，并视西索为第一个超越的目标。为了寻找父亲金的下落而进入了贪婪之岛，虽然还是没有找到父亲，但却成功地将游戏完美通关，其中还完成了必杀技“猜猜拳”。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

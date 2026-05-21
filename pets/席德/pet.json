@@ -1,0 +1,45 @@
+{
+  "id": "Seed",
+  "displayName": "席德",
+  "description": "游戏《绝区零》中的S级电属性强攻角色。“奥波勒斯小队”的火炮手，本名芙罗拉，是旧都陷落时，从零号空洞中被营救出的身份不明的孤儿，后由防卫军战斗用智能构造体“席德”抚养成人，并继承了其“席德”的代号，在机械改造与研究方面，具有远超常人的天赋。而在日常生活中，“席德”的“电波”思维常常令周围人摸不着头脑，她逻辑跳跃性极强的言行令沟通变得困难。不过若能以平常心看待其对话中无法理解逻辑或含义的部分，或许能拉近与她的关系",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

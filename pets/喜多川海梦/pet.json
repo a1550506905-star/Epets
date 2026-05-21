@@ -1,0 +1,45 @@
+{
+  "id": "Kitagawa Marin",
+  "displayName": "喜多川海梦",
+  "description": "喜多川海梦，日本漫画《更衣人偶坠入爱河》及其衍生作品中的女主角，高中一年级学生。班上的高人气美少女，兼职读者模特。性格开朗，思想开放，始终处于圈子中心。她喜欢动画、游戏和漫画，并渴望角色扮演。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

@@ -1,0 +1,45 @@
+{
+  "id": "Suzumiya Haruhi",
+  "displayName": "凉宫春日",
+  "description": "轻小说《凉宫春日系列》及其衍生作品的女主角。好胜心极强，有着唯我独尊、旁若无人的性格。升入高中后不满足于任何社团，接受阿虚的建议，闪电成立了SOS团（让世界变得更热闹的凉宫春日团）。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

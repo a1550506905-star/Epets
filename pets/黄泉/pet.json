@@ -1,0 +1,45 @@
+{
+  "id": "Raiden Bosenmori Mei",
+  "displayName": "黄泉",
+  "description": "米哈游出品的游戏《崩坏：星穹铁道》及其衍生作品中的角色。自称“巡海游侠”的旅人，身佩一柄长刀，独行银河。淡漠寡言，剑出如紫电般迅猛，却从来只以刀鞘战斗，收而不发 。她已然在“虚无”的命途的道路上走得远比常人深远。而她的过去，却仍知之甚少。来自“出云国”，而那曾经名为“出云”的土地上，人、神、鬼…皆已无处可寻",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

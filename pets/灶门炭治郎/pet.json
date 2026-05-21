@@ -1,0 +1,45 @@
+{
+  "id": "Kamado Tanjiro",
+  "displayName": "灶门炭治郎",
+  "description": "灶门炭治郎，漫画《鬼灭之刃》及其衍生作品中的主角。炭治郎出生于卖炭家族，是左额处有伤疤的鬼杀队剑士，也是善良温柔的少年。为了拯救变成鬼的妹妹灶门祢豆子，他在讨伐恶鬼的同时，也在不断地搜寻着仇敌鬼舞辻无惨。炭治郎使用着祖上流传的火之神神乐（日之呼吸），以及从前水柱处习得的水之呼吸。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

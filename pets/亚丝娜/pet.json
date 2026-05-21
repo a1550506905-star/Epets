@@ -1,0 +1,45 @@
+{
+  "id": "Yuuki Asuna",
+  "displayName": "亚丝娜",
+  "description": "日本轻小说《刀剑神域》及其衍生作品中的女主角。因好奇借用哥哥结城浩一郎的NERvGear进入SAO的网络游戏新手，并用真名取游戏角色名字。卷入了死亡游戏后内心一直恐惧而感到害怕，一直想尽快突破100层回到现实世界，被攻略组称为顶级公会的攻略之鬼，因为和桐人不和而决斗，后开始注意起桐人，直到认识“活在”SAO里的桐谷和人后改变想法，也因此喜欢上桐谷和人并在游戏里结婚。（这个为还在SAO中的亚丝娜）",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 1000
+}

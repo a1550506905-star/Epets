@@ -1,0 +1,45 @@
+{
+  "id": "Killua Zoldyck",
+  "displayName": "奇犽",
+  "description": "日本漫画《全职猎人》及其衍生作品中的男主角。隶属于猎人协会的赏金猎人。出身在巴托奇亚共和国里位于海拔三千多公尺的枯枯戮山上的杀手揍敌客家族，从3岁起就接受严格的恐怖杀手训练，被家族训练成是一个完全没有感情的杀手。资质被家族内称为有历代最好，因而被寄予厚望将来成为家主，但不愿意走这安排好的路，于是离家出走，并在猎人考试中结识小杰一行人，与小杰成为挚友，开始冒险旅程。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

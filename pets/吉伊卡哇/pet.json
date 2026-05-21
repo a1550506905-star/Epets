@@ -1,0 +1,45 @@
+{
+  "id": "Chiikawa",
+  "displayName": "吉伊卡哇",
+  "description": "是漫画《吉伊卡哇》及其衍生作品中的角色。该角色外形为毛茸茸的白色小仓鼠，圆脸大眼睛，尾巴呈小圆球状，冬季毛发会变长，性格内向胆小但温柔善良，关心朋友且具有意外的好运，关键时刻展现勇气，依靠单音节交流，所用武器是粉红色刺叉，中文版配音由关云月担任。（只会说单音节，意思用括号内的内容标识）",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

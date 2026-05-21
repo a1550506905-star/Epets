@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; background: transparent; }
+    body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; font-size: 13px; color: #444; }
+    .window-container {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      overflow: hidden;
+      position: relative;
+    }
+    .window-header {
+      display: flex; justify-content: flex-end; align-items: center;
+      height: 36px; padding: 0 8px;
+      -webkit-app-region: drag;
+      background: #fff;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      flex-shrink: 0;
+    }
+    .window-header button {
+      -webkit-app-region: no-drag;
+      width: 28px; height: 28px;
+      border: none; border-radius: 8px;
+      background: rgba(0,0,0,0.04); color: #999;
+      font-size: 16px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s; margin-left: 4px;
+    }
+    .window-header button:hover { background: rgba(0,0,0,0.08); color: #555; }
+    .btn-close:hover { background: rgba(255,80,80,0.2) !important; color: #e44 !important; }
+    .window-body { flex: 1; overflow-y: auto; padding: 24px 28px; line-height: 1.8; }
+    .window-body h3 { font-size: 15px; color: #333; margin-bottom: 12px; }
+    .window-body p { color: #666; margin: 6px 0; font-size: 13px; }
+    .window-body .section { margin-bottom: 16px; }
+    .version { position: absolute; bottom: 8px; right: 16px; font-size: 11px; color: #bbb; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.10); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.20); }
+  </style>
+</head>
+<body>
+  <div class="window-container">
+    <div class="window-header">
+      <button class="btn-minimize" title="最小化">─</button>
+      <button class="btn-close" title="关闭">&times;</button>
+    </div>
+    <div class="window-body">
+      <h3>使用说明</h3>
+
+      <div class="section">
+        <p><strong>基本操作</strong></p>
+        <p>右键点击桌面上的角色可打开菜单，进行添加角色、调整大小、打开剪贴板等操作。</p>
+        <p>通过「添加角色」可选择已解锁的角色放置到桌面上，支持同时显示多个角色。</p>
+        <p>在「角色商店」中可使用积分兑换新角色，软件每运行一分钟自动获得 1 积分。</p>
+      </div>
+
+      <div class="section">
+        <p><strong>文件收纳与分析</strong></p>
+        <p>将文件拖拽到角色身上，文件会被收纳到暂存文件夹中。如果是文档、PDF、表格、PPT 等格式，还会自动打开对话窗口，对文件内容进行分析总结。</p>
+      </div>
+
+      <div class="section">
+        <p><strong>角色对话</strong></p>
+        <p>双击角色即可打开对话窗口。每个角色都拥有独立的记忆，会记住你们之间的聊天内容，以角色自身的性格和口吻与你交流。同时也可当作通用 AI 助手使用，回答各类问题。</p>
+        <p>对话窗口标题栏可在「聊天」和「工作」模式之间切换：日常聊天建议使用聊天模式，反应迅速；工作模式下角色会深度思考，回复质量更高但速度稍慢。</p>
+      </div>
+
+      <div class="section">
+        <p><strong>剪贴板历史</strong></p>
+        <p>软件会自动记录 24 小时内复制过的内容，点击条目即可再次复制使用。</p>
+      </div>
+
+      <div class="section">
+        <p><strong>注意事项</strong></p>
+        <p>软件目前处于测试阶段，可能存在不稳定的情况，敬请谅解。</p>
+      </div>
+
+      <div class="section">
+        <p><strong>未来更新方向</strong></p>
+        <p>持续加入更多角色与功能，不断强化角色对话体验，让你能与角色一起展开更多互动与冒险。</p>
+      </div>
+    </div>
+    <span class="version">v0.5.13</span>
+  </div>
+  <script>document.querySelector('.btn-close').onclick=()=>window.close();document.querySelector('.btn-minimize').onclick=()=>window.api.minimizeWindow();</script>
+</body>
+</html>

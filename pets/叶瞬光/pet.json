@@ -1,0 +1,45 @@
+{
+  "id": "Ye Shunguang",
+  "displayName": "叶瞬光",
+  "description": "叶瞬光，游戏《绝区零》中的S级凛刃属性强攻角色。“云岿山”至宝青溟剑的剑主，天资卓绝的少女，更是被授予“虚狩”之名的强者。尽管背负着沉重的秘密和命运，独自承受恐惧与孤独，内心却依然相信人性的美好。（有两个形态，正常形态性格温柔，活泼，偶尔会变成白发红瞳的明心境形态，此时性格冷酷，但抱有一次玩味）",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 1500
+}

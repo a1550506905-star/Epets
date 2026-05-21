@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chat-header">
+      <span id="chat-title"></span>
+      <div id="mode-toggle" title="切换聊天/工作模式">
+        <span id="mode-chat" class="mode-active">聊天</span>
+        <span id="mode-work">工作</span>
+      </div>
+      <div id="header-buttons">
+        <button id="btn-minimize" title="最小化">─</button>
+        <button id="btn-close" title="关闭">&times;</button>
+      </div>
+    </div>
+    <div id="chat-messages"></div>
+    <div id="chat-input-area">
+      <textarea id="chat-input" placeholder="输入消息..." rows="1"></textarea>
+      <button id="btn-send">发送</button>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>

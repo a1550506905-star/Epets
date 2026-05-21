@@ -1,0 +1,45 @@
+{
+  "id": "Kamisato Ayaka",
+  "displayName": "神里绫华",
+  "description": "神里绫华，米哈游出品的游戏《原神》及其衍生作品中的角色，稻妻社奉行神里家的大小姐。容姿端丽，品行高洁。绫华贵为公主，平日主理家族内外事宜。绫华常出现在社交场合，与民间交集也较多。因此，更被人们熟悉的她反而获得了高于兄长的名望，被雅称为白鹭公主。众所周知，神里家的女儿绫华小姐容姿端丽、品行高洁，是深受民众钦慕的人物。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

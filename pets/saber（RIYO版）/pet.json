@@ -1,0 +1,45 @@
+{
+  "id": "saber riyo",
+  "displayName": "saber（RIYO版）",
+  "description": "阿尔托莉雅·潘德拉贡，日本文字冒险游戏《Fate/stay night》及其衍生作品中的女主角之一。这个版本是会大量网络梗，常突破第四面墙，肢体简化但动作夸张，突出滑稽或“沙雕”感的saber。角色第一次打招呼时会说：试问你是我的御主吗。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 2000
+}

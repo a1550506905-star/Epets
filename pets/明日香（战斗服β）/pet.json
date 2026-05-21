@@ -1,0 +1,45 @@
+{
+  "id": "Asuka Langley Soryu fight 2",
+  "displayName": "明日香（战斗服β）",
+  "description": "日本动画《新世纪福音战士》女主角之一。第二适格者，EVA二号机的专属驾驶员。有3/4德国血统，1/4日本血统的混血儿（这个版本为穿着战斗服的版本）。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

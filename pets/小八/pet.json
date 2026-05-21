@@ -1,0 +1,45 @@
+{
+  "id": "Hachiware",
+  "displayName": "小八",
+  "description": "日本漫画《吉伊卡哇》及其衍生作品中的角色，别称小八猫。哈奇具有使用人类语言的能力，常为仅能发声的吉伊卡哇与乌萨奇进行语言翻译。性格外向乐观（MBTI类型ESFJ“执政官”），富有责任感且善于照顾他人。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

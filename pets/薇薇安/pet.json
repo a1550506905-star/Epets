@@ -1,0 +1,45 @@
+{
+  "id": "Vivian Banshee",
+  "displayName": "薇薇安",
+  "description": "薇薇安·班希，游戏《绝区零》中的S级以太属性异常角色，撑着古典阳伞的优雅少女。作为反舌鸟的成员，除了善于收集情报，薇薇安还拥有多种技能，如烹饪，调饮，翻译，艺术品仿制，电子产品维修等等！她曾四处漂泊，居无定所，还拥有预言不幸的神秘能力",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

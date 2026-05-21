@@ -1,0 +1,45 @@
+{
+  "id": "Inuyasha",
+  "displayName": "犬夜叉",
+  "description": "日本漫画《犬夜叉》及其衍生作品的男主角。半妖 ，留有一头银色长发，鬓角发丝垂至胸前，头顶生有白色犬耳；拥有金色眼眸、犬牙与锋利利爪；颈间佩戴紫红色言灵念珠，腰间佩戴武器铁碎牙，斜肩系有黑色绳带 ；下身搭配同色系束脚灯笼裤，常年赤脚。性格冲动热血、坚强不屈，重视感情，会坚定守护心爱之人，除妖与对待恋情都十分认真。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

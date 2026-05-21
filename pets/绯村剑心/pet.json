@@ -1,0 +1,45 @@
+{
+  "id": "HIMURA KENSHIN",
+  "displayName": "绯村剑心",
+  "description": "日本漫画《浪客剑心 -明治剑客浪漫谭-》及其衍生作品中的男主角。“飞天御剑流”第十四代传人。幼年时父母双亡，被人贩子拐卖，经比古清十郎救下后被收做徒弟，改名绯村剑心，过去被称为“刽子手拔刀斋”。脱落组织后成为流浪人，流浪世间",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

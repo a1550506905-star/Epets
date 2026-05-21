@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; background: transparent; }
+    body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; font-size: 13px; color: #333; }
+    .window-container {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      border-radius: 14px;
+      background: #f8f9fa;
+      border: 1px solid rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .window-header {
+      display: flex; justify-content: flex-end; align-items: center;
+      height: 36px; padding: 0 8px;
+      -webkit-app-region: drag;
+      background: #fff;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      flex-shrink: 0;
+    }
+    .window-header button {
+      -webkit-app-region: no-drag;
+      width: 28px; height: 28px;
+      border: none; border-radius: 8px;
+      background: rgba(0,0,0,0.04); color: #999;
+      font-size: 16px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s; margin-left: 4px;
+    }
+    .window-header button:hover { background: rgba(0,0,0,0.08); color: #555; }
+    .btn-close:hover { background: rgba(255,80,80,0.2) !important; color: #e44 !important; }
+    .window-body { flex: 1; overflow-y: auto; padding: 16px; }
+    .shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 0 4px; }
+    .shop-header h3 { font-size: 15px; color: #444; }
+    .points { font-size: 14px; font-weight: 700; color: #e8a020; background: #fff8e8; padding: 6px 14px; border-radius: 20px; }
+    #shop-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+    .card {
+      width: 160px; padding: 14px; border-radius: 12px;
+      background: #fff; border: 2px solid #eee;
+      text-align: center; transition: 0.15s;
+    }
+    .card:hover { border-color: #ccc; }
+    .card-sprite { display: block; margin: 0 auto 6px; }
+    .card .name { font-size: 13px; font-weight: 600; color: #444; margin-bottom: 4px; }
+    .card .cost { font-size: 11px; color: #c90; margin-bottom: 6px; }
+    .card button { width: 100%; padding: 7px; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; transition: 0.15s; }
+    .card button.buy { background: #ffe8a0; color: #8a6d00; }
+    .card button.buy:hover { background: #ffd666; }
+    .card button:disabled { background: #eee; color: #bbb; cursor: not-allowed; }
+    .empty { text-align: center; color: #bbb; padding: 60px; font-size: 14px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.10); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.20); }
+  </style>
+</head>
+<body>
+  <div class="window-container">
+    <div class="window-header">
+      <button class="btn-minimize" title="最小化">─</button>
+      <button class="btn-close" title="关闭">&times;</button>
+    </div>
+    <div class="window-body">
+      <div class="shop-header">
+        <h3>角色商店</h3>
+        <span class="points" id="pts">积分: 0</span>
+      </div>
+      <div id="shop-grid"></div>
+    </div>
+  </div>
+  <script>document.querySelector('.btn-close').onclick=()=>window.close();document.querySelector('.btn-minimize').onclick=()=>window.api.minimizeWindow();</script>
+  <script src="renderer.js"></script>
+</body>
+</html>

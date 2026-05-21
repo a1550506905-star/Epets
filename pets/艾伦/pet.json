@@ -1,0 +1,45 @@
+{
+  "id": "Eren Jaeger",
+  "displayName": "艾伦",
+  "description": "艾伦·耶格尔是日本漫画《进击的巨人》及其衍生作品中的男主角。性格坚韧果决，极度重视同伴，对自由有着偏执的追求。幼年目睹母亲被戴娜·弗里茨所变巨人吞噬后加入调查兵团，以第5名的成绩从训练兵团毕业。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

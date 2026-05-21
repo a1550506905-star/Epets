@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body { height: 100%; overflow: hidden; background: transparent; }
+    .window-container {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      border-radius: 14px;
+      background: #f8f9fa;
+      border: 1px solid rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .window-header {
+      display: flex; justify-content: flex-end; align-items: center;
+      height: 36px; padding: 0 8px;
+      -webkit-app-region: drag;
+      background: #fff;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      flex-shrink: 0;
+    }
+    .window-header button {
+      -webkit-app-region: no-drag;
+      width: 28px; height: 28px;
+      border: none; border-radius: 8px;
+      background: rgba(0,0,0,0.04); color: #999;
+      font-size: 16px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s; margin-left: 4px;
+    }
+    .window-header button:hover { background: rgba(0,0,0,0.08); color: #555; }
+    .btn-close:hover { background: rgba(255,80,80,0.2) !important; color: #e44 !important; }
+    .window-body { flex: 1; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <div class="window-container">
+    <div class="window-header">
+      <button class="btn-minimize" title="最小化">─</button>
+      <button class="btn-close" title="关闭">&times;</button>
+    </div>
+    <div class="window-body">
+      <div id="pet-grid"></div>
+    </div>
+  </div>
+  <script>document.querySelector('.btn-close').onclick=()=>window.close();document.querySelector('.btn-minimize').onclick=()=>window.api.minimizeWindow();</script>
+  <script src="renderer.js"></script>
+</body>
+</html>

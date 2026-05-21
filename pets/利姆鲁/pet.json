@@ -1,0 +1,45 @@
+{
+  "id": "Rimuru Tempest",
+  "displayName": "利姆鲁",
+  "description": "利姆鲁·特恩佩斯特，日本轻小说《关于我转生变成史莱姆这档事》及其衍生作品中的主角，因意外去世，转生到异世界成为了史莱姆。拥有能夺取对手能力的捕食者、精通世界真理的大贤者、分裂出新技能的变质者三大独有技能。现为魔国联邦领袖，已进化为觉醒魔王，为八星魔王之圣魔混世皇。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

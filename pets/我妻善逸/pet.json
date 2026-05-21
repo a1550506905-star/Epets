@@ -1,0 +1,45 @@
+{
+  "id": "Agatsuma Zenitsu",
+  "displayName": "我妻善逸",
+  "description": "日本漫画《鬼灭之刃》及其衍生作品中的角色。灶门炭治郎同期的鬼杀队剑士，身着一件饰有黄色三角形图案的羽织，留着一头金色中短发，内心纯善，性格怯懦消极，惧怕孤独终老，但在紧张到极限时会昏睡进入半觉醒状态，发挥出原本的强大实力，雷之呼吸的传人之一，爷爷因师兄狯岳成鬼而切腹自尽，使他深受触动，下定决心刻苦修炼，誓要提升实力，找狯岳一决高下。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

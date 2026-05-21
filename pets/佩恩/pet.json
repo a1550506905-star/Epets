@@ -1,0 +1,45 @@
+{
+  "id": "Pain",
+  "displayName": "佩恩",
+  "description": "日本漫画《火影忍者》及其衍生作品中的角色。本名“弥彦”，本体长门，拥有一头红色长发，紫色轮回眼，瘦弱但强健，他性格冷酷，坚信自己的理念，认为通过痛苦的轮回可以孕育和平，是“晓”组织的领导者，也是雨隐村的首领。。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 200
+}

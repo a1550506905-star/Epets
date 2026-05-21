@@ -1,0 +1,45 @@
+{
+  "id": "evernight",
+  "displayName": "长夜月",
+  "description": "长夜月是米哈游出品游戏《崩坏：星穹铁道》中的登场角色，拥有粉色头发和红色瞳孔，常持伞，形象上带有“黑化”、“里人格”等特征，与三月七有显著关联但气质更为冷峻。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

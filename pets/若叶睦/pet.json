@@ -1,0 +1,45 @@
+{
+  "id": "Wakaba Mutsumi",
+  "displayName": "若叶睦",
+  "description": "若叶睦，是日本二次元少女乐队企划BanG Dream!及其衍生作品中的角色。月之森女子学园高中一年级生，丰川祥子的青梅竹马。前CRYCHIC成员，现Ave Mujica成员，在队内担任吉他手，艺名Mortis（死亡）。父亲是喜剧泰斗若叶隆文，母亲是实力派演员森美奈美，家里经常有社会名流拜访。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

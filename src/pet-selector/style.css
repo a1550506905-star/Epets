@@ -1,0 +1,41 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.window-body {
+  font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #f8f9fa;
+  padding: 16px;
+}
+#pet-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.pet-card {
+  width: 140px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #eee;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+}
+.pet-card:hover { border-color: #8bf; background: #f0f6ff; }
+.pet-card.selected { border-color: #48f; background: #e8f0ff; }
+.pet-sprite {
+  display: block;
+  margin: 0 auto 6px;
+  image-rendering: auto;
+}
+.pet-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.10); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.20); }

@@ -1,0 +1,45 @@
+{
+  "id": "Akiyama Mio",
+  "displayName": "秋山澪",
+  "description": "是日本漫画《轻音少女》及其衍生作品中的角色。私立樱丘女子高等学校轻音部的贝斯手及伴唱，原打算加入文艺部，却被青梅竹马的田井中律拉进了轻音部，因觉得吉他太引人注意而选择成为贝斯手。害羞胆小，做事认真，成绩优秀，是个很好相处的女孩，也是轻音部中唯一有后援会的部员。",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}

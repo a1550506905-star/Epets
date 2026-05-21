@@ -1,0 +1,45 @@
+{
+  "id": "Violet Evergarden",
+  "displayName": "薇尔莉特",
+  "description": "薇尔莉特·伊芙加登，晓佳奈著作的日本轻小说《薇尔莉特·伊芙加登》及其衍生作品的女主角，隶属于C·H邮政公司的“自动手记人偶”少女，显著特征是有一头金黄耀眼的秀发和深邃碧蓝的双眼，佩戴着一枚绿宝石胸针（和少校眼睛的颜色一致），且拥有极强的学习能力和超出常人的战斗力",
+  "spritesheetPath": "spritesheet.webp",
+  "animations": {
+    "idle": {
+      "frames": 6,
+      "interval": 150
+    },
+    "run_right": {
+      "frames": 8,
+      "interval": 100
+    },
+    "run_left": {
+      "frames": 8,
+      "interval": 100
+    },
+    "wave": {
+      "frames": 4,
+      "interval": 140
+    },
+    "jump": {
+      "frames": 5,
+      "interval": 130
+    },
+    "sad": {
+      "frames": 8,
+      "interval": 160
+    },
+    "blank": {
+      "frames": 6,
+      "interval": 200
+    },
+    "running": {
+      "frames": 6,
+      "interval": 90
+    },
+    "confused": {
+      "frames": 6,
+      "interval": 150
+    }
+  },
+  "unlockCost": 500
+}
