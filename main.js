@@ -717,12 +717,12 @@ function setupIPC() {
 
       // 有文本回复 → 直接返回
       if (msg.content && !msg.tool_calls) {
-        return { content: msg.content };
+        return { content: msg.content, reasoning_content: msg.reasoning_content || '' };
       }
 
       // 有工具调用 → 执行
       if (msg.tool_calls && msg.tool_calls.length > 0) {
-        apiMessages.push({ role: 'assistant', tool_calls: msg.tool_calls, content: msg.content || null });
+        apiMessages.push({ role: 'assistant', tool_calls: msg.tool_calls, content: msg.content || null, reasoning_content: msg.reasoning_content || '' });
         for (const tc of msg.tool_calls) {
           if (tc.function.name === 'web_search') {
             const args = JSON.parse(tc.function.arguments || '{}');

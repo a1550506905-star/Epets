@@ -173,8 +173,10 @@ function addMessageDom(role, text) {
   return div;
 }
 
-function addMessage(role, text) {
-  messages.push({ role, content: text });
+function addMessage(role, text, reasoningContent) {
+  const msg = { role, content: text };
+  if (reasoningContent) msg.reasoning_content = reasoningContent;
+  messages.push(msg);
   window.api.saveChatHistory(petId, messages);
   return addMessageDom(role, text);
 }
@@ -223,10 +225,11 @@ async function sendMessage() {
 
   const apiMessages = [
     { role: 'system', content: systemPrompt + weatherBlock },
-    ...messages.filter(m => m.role !== 'system').slice(-10).map(m => ({
-      role: m.role === 'assistant' ? 'assistant' : 'user',
-      content: m.content
-    }))
+    ...messages.filter(m => m.role !== 'system').slice(-10).map(m => {
+      const msg = { role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content };
+      if (m.reasoning_content) msg.reasoning_content = m.reasoning_content;
+      return msg;
+    })
   ];
 
   const result = await window.api.deepseekChat({
@@ -243,7 +246,7 @@ async function sendMessage() {
   if (result.error) {
     addMessage('assistant', '呜...好像出了点问题：' + result.error);
   } else {
-    addMessage('assistant', result.content);
+    addMessage('assistant', result.content, result.reasoning_content);
     window.api.notifyPetTalk();
   }
 }
@@ -272,7 +275,7 @@ async function callDeepSeek(userMessage, isFileContext) {
   if (result.error) {
     addMessage('assistant', '呜...好像出了点问题：' + result.error);
   } else {
-    addMessage('assistant', result.content);
+    addMessage('assistant', result.content, result.reasoning_content);
     window.api.notifyPetTalk();
   }
 }
