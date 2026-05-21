@@ -336,6 +336,19 @@ ${timeContext}${wxContext}
 }
 
 function formatMessage(text) {
+  // 过滤模型可能在文本中输出的 tool call 语法
+  text = text.replace(/<\/?[a-z_-]*tool[s]?_?calls[a-z_-]*[^>]*>[\s\S]*?<\/[a-z_-]*tool[s]?_?calls[a-z_-]*[^>]*>/gi, (m) => {
+    // 先过滤内容里的子标签
+    return m.replace(/<invoke[^>]*>[\s\S]*?<\/invoke>/gi, '')
+            .replace(/<parameter[^>]*>[\s\S]*?<\/parameter>/gi, '')
+            .replace(/<[a-z_-]*function[^>]*>[\s\S]*?<\/[a-z_-]*function[^>]*>/gi, '');
+  });
+  text = text.replace(/<invoke[^>]*>[\s\S]*?<\/invoke>/gi, '');
+  text = text.replace(/<parameter[^>]*>[\s\S]*?<\/parameter>/gi, '');
+  text = text.replace(/<[a-z_-]*function[^>]*>[\s\S]*?<\/[a-z_-]*function[^>]*>/gi, '');
+  text = text.replace(/web_search\s*\([^)]*\)/gi, '');
+  // 清理可能残留的空行
+  text = text.replace(/\n{3,}/g, '\n\n');
   // 先转义 HTML
   const div = document.createElement('div');
   div.textContent = text;

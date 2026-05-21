@@ -353,6 +353,16 @@ function createChatWindow(pet, event) {
 }
 
 // Web search - 多源搜索：Bing → DuckDuckGo HTML → Google News RSS
+function stripToolSyntax(text) {
+  return text
+    .replace(/<\/?[a-z_-]*tool[s]?_?calls[a-z_-]*[^>]*>[\s\S]*?<\/[a-z_-]*tool[s]?_?calls[a-z_-]*[^>]*>/gi, '')
+    .replace(/<invoke[^>]*>[\s\S]*?<\/invoke>/gi, '')
+    .replace(/<parameter[^>]*>[\s\S]*?<\/parameter>/gi, '')
+    .replace(/<[a-z_-]*function[^>]*>[\s\S]*?<\/[a-z_-]*function[^>]*>/gi, '')
+    .replace(/web_search\s*\([^)]*\)/gi, '')
+    .replace(/\n{3,}/g, '\n\n').trim();
+}
+
 function decodeHtml(str) {
   return str
     .replace(/<[^>]*>/g, '')
@@ -694,18 +704,20 @@ function setupIPC() {
     if (!apiKey) return { error: '请先设置 DeepSeek API Key' };
 
     const apiMessages = [...opts.messages];
-    const tools = opts.tools || null;
-    let maxRounds = 3;
+    const userTools = opts.tools || null;
+    let activeTools = userTools;
+    let searchCount = 0;
+    const MAX_SEARCHES = 3;
 
-    while (maxRounds-- > 0) {
+    while (true) {
       const requestBody = {
         model: opts.model || 'deepseek-chat', messages: apiMessages, stream: false,
         temperature: opts.temperature || 0.7,
         max_tokens: opts.max_tokens || 2000
       };
-      if (tools) { requestBody.tools = tools; requestBody.tool_choice = 'auto'; }
+      if (activeTools) { requestBody.tools = activeTools; requestBody.tool_choice = 'auto'; }
 
-      debugLog('deepseek: round ' + (3 - maxRounds) + ' tools=' + (tools ? 'yes(' + tools.length + ')' : 'no') + ' msgs=' + apiMessages.length);
+      debugLog('deepseek: round searches=' + searchCount + ' tools=' + (activeTools ? 'yes' : 'no') + ' msgs=' + apiMessages.length);
 
       const result = await callDeepSeekAPI(apiKey, requestBody);
       if (result.error) { debugLog('deepseek: error=' + result.error); return result; }
@@ -717,29 +729,40 @@ function setupIPC() {
 
       // 有文本回复 → 直接返回
       if (msg.content && !msg.tool_calls) {
-        return { content: msg.content, reasoning_content: msg.reasoning_content || '' };
+        const cleanContent = stripToolSyntax(msg.content);
+        return { content: cleanContent, reasoning_content: msg.reasoning_content || '' };
       }
 
       // 有工具调用 → 执行
       if (msg.tool_calls && msg.tool_calls.length > 0) {
         apiMessages.push({ role: 'assistant', tool_calls: msg.tool_calls, content: msg.content || null, reasoning_content: msg.reasoning_content || '' });
+        let searchFailed = false;
         for (const tc of msg.tool_calls) {
           if (tc.function.name === 'web_search') {
+            searchCount++;
             const args = JSON.parse(tc.function.arguments || '{}');
             const searchResult = await webSearch(args.query || '');
-            const response = searchResult || '搜索未返回任何结果。请基于你的知识直接回答用户，不要再次尝试搜索。';
-            apiMessages.push({ role: 'tool', tool_call_id: tc.id, content: response });
-            debugLog('tool: search "' + (args.query || '').slice(0, 50) + '" -> ' + (searchResult ? searchResult.length + ' chars' : 'empty'));
+            if (searchResult) {
+              apiMessages.push({ role: 'tool', tool_call_id: tc.id, content: searchResult });
+            } else {
+              searchFailed = true;
+              apiMessages.push({ role: 'tool', tool_call_id: tc.id, content: '搜索未返回结果。' });
+            }
+            debugLog('tool: search #' + searchCount + ' "' + (args.query || '').slice(0, 50) + '" -> ' + (searchResult ? searchResult.length + ' chars' : 'empty'));
           } else {
-            apiMessages.push({ role: 'tool', tool_call_id: tc.id, content: '未知工具，请直接回答用户。' });
+            apiMessages.push({ role: 'tool', tool_call_id: tc.id, content: '未知工具。' });
           }
+        }
+        // 搜索失败或搜满 → 禁用工具，强制直接回答
+        if (searchFailed || searchCount >= MAX_SEARCHES) {
+          activeTools = null;
+          apiMessages.push({ role: 'system', content: '搜索已结束。你必须基于上面返回的搜索结果来回答用户的问题，逐条列出找到的相关信息，然后用你的角色风格加以解读。禁止无视搜索结果凭空回答，禁止编造信息。' });
         }
         continue;
       }
 
       return { error: 'API返回格式异常' };
     }
-    return { error: '搜索次数过多，请稍后再试' };
   });
 
 function callDeepSeekAPI(apiKey, body) {

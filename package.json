@@ -20,7 +20,7 @@
   },
   "build": {
     "appId": "com.deskpet.app",
-    "productName": "桌面宠物",
+    "productName": "Epets",
     "directories": { "output": "dist" },
     "extraResources": [
       { "from": "pets", "to": "pets" },
