@@ -5,3 +5,5 @@ debug.log
 *.asar
 app-output.txt
 test-output.txt
+暂存文件/
+.claude/
