@@ -38,24 +38,34 @@
     }
   };
 
+  let latestUpdateResult = null;
   const updateMsg = document.getElementById('update-msg');
-  document.getElementById('check-update').onclick = async () => {
-    const btn = document.getElementById('check-update');
-    btn.textContent = '检查中...';
-    btn.disabled = true;
+  const updateBtn = document.getElementById('check-update');
+
+  updateBtn.onclick = async () => {
+    if (latestUpdateResult) {
+      await window.api.doUpdate(latestUpdateResult);
+      return;
+    }
+    updateBtn.textContent = '检查中...';
+    updateBtn.disabled = true;
     const result = await window.api.checkForUpdate();
-    btn.textContent = '检查 GitHub 更新';
-    btn.disabled = false;
+    updateBtn.disabled = false;
     if (result.error) {
       updateMsg.className = 'msg err';
       updateMsg.textContent = result.error;
+      updateBtn.textContent = '检查 GitHub 更新';
     } else if (result.hasUpdate) {
+      latestUpdateResult = result;
       updateMsg.className = 'msg ok';
-      updateMsg.textContent = `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}），请前往 GitHub 下载更新`;
-      updateMsg.className = 'msg ok';
+      updateMsg.textContent = `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`;
+      updateBtn.textContent = '立即更新';
+      updateBtn.style.background = '#e8f5e9'; updateBtn.style.color = '#2e7d32'; updateBtn.style.borderColor = '#a5d6a7';
     } else {
+      latestUpdateResult = null;
       updateMsg.className = 'msg ok';
       updateMsg.textContent = `已是最新版本 (${result.currentVersion})`;
+      updateBtn.textContent = '检查 GitHub 更新';
     }
   };
 

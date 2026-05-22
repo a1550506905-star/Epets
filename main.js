@@ -588,11 +588,13 @@ async function checkForUpdate() {
         try {
           const release = JSON.parse(data);
           if (release.tag_name && compareVersions(release.tag_name, currentVersion) > 0) {
+            const exeAsset = (release.assets || []).find(a => a.name && a.name.endsWith('.exe'));
             resolve({
               hasUpdate: true,
               latestVersion: release.tag_name,
               currentVersion: currentVersion,
-              downloadUrl: release.html_url || 'https://github.com/a1550506905-star/Epets/releases/latest',
+              downloadUrl: exeAsset ? exeAsset.browser_download_url : '',
+              assetSize: exeAsset ? exeAsset.size : 0,
               releaseNotes: (release.body || '').slice(0, 500)
             });
           } else {
@@ -604,6 +606,112 @@ async function checkForUpdate() {
       });
     }).on('error', () => resolve({ error: '检查更新失败，请检查网络' }))
       .on('timeout', function() { this.destroy(); resolve({ error: '检查更新超时' }); });
+  });
+}
+
+function downloadUpdate(downloadUrl, onProgress) {
+  return new Promise((resolve, reject) => {
+    const urlObj = new URL(downloadUrl);
+    const req = https.request({
+      hostname: urlObj.hostname,
+      path: urlObj.pathname + urlObj.search,
+      headers: { 'User-Agent': 'Epets/' + app.getVersion(), 'Accept': 'application/octet-stream' },
+      timeout: 300000
+    }, (res) => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        req.destroy();
+        downloadUpdate(res.headers.location, onProgress).then(resolve).catch(reject);
+        return;
+      }
+      if (res.statusCode !== 200) { req.destroy(); reject(new Error('下载失败 HTTP ' + res.statusCode)); return; }
+      const total = parseInt(res.headers['content-length'] || 0);
+      const chunks = []; let downloaded = 0;
+      res.on('data', chunk => {
+        chunks.push(chunk);
+        downloaded += chunk.length;
+        if (total && onProgress) onProgress(downloaded, total);
+      });
+      res.on('end', () => {
+        if (!total && onProgress) onProgress(chunks.reduce((s, c) => s + c.length, 0), 1);
+        resolve(Buffer.concat(chunks));
+      });
+    });
+    req.on('error', (e) => reject(new Error('下载失败: ' + e.message)));
+    req.on('timeout', () => { req.destroy(); reject(new Error('下载超时')); });
+    req.end();
+  });
+}
+
+function installUpdateAndRestart(updateBuf) {
+  try {
+    const exePath = app.getPath('exe');
+    const exeDir = path.dirname(exePath);
+    const newExePath = path.join(exeDir, 'Epets_new.exe');
+    fs.writeFileSync(newExePath, updateBuf);
+
+    const batPath = path.join(exeDir, 'update.bat');
+    const batContent =
+      '@echo off\r\n' +
+      'ping 127.0.0.1 -n 3 >nul\r\n' +
+      'move /Y "' + newExePath + '" "' + exePath + '"\r\n' +
+      'start "" "' + exePath + '"\r\n' +
+      'del "%~f0"\r\n';
+    fs.writeFileSync(batPath, batContent);
+
+    const child = require('child_process');
+    child.spawn('cmd.exe', ['/c', batPath], {
+      detached: true, stdio: 'ignore', cwd: exeDir
+    }).unref();
+    app.quit();
+  } catch (e) {
+    dialog.showErrorBox('安装失败', e.message);
+  }
+}
+
+function doUpdate(result) {
+  const versionInfo = `当前版本: ${result.currentVersion}\n新版本: ${result.latestVersion}`;
+  dialog.showMessageBox({
+    type: 'info', title: '发现新版本', buttons: ['立即更新', '稍后再说'],
+    message: `发现新版本 ${result.latestVersion}`,
+    detail: (result.releaseNotes || '') + '\n\n' + versionInfo
+  }).then(({ response }) => {
+    if (response !== 0) return;
+    // 创建下载进度窗口
+    const progressWin = new BrowserWindow({
+      width: 360, height: 140, resizable: false, center: true, frame: false,
+      icon: appIcon,
+      webPreferences: { contextIsolation: true, nodeIntegration: false }
+    });
+    const progressHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{font-family:'Microsoft YaHei',sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,0.1)}
+      .box{text-align:center;padding:24px}
+      .title{font-size:14px;color:#333;margin-bottom:12px}
+      .bar{width:280px;height:8px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:8px}
+      .fill{height:100%;background:#4a8;border-radius:4px;transition:width 0.3s;width:0%}
+      .info{font-size:11px;color:#999}
+    </style></head><body><div class="box">
+      <div class="title">正在下载更新...</div>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="info" id="info"></div>
+    </div></body></html>`;
+    progressWin.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(progressHtml));
+    progressWin.once('ready-to-show', () => {
+      downloadUpdate(result.downloadUrl, (done, total) => {
+        if (progressWin.isDestroyed()) return;
+        const pct = Math.round(done / total * 100);
+        const sizeMB = (done / 1024 / 1024).toFixed(1) + ' / ' + (total / 1024 / 1024).toFixed(1) + ' MB';
+        progressWin.webContents.executeJavaScript(
+          `document.getElementById('fill').style.width='${pct}%';document.getElementById('info').textContent='${sizeMB}';`
+        ).catch(() => {});
+      }).then(buf => {
+        if (!progressWin.isDestroyed()) progressWin.close();
+        installUpdateAndRestart(buf);
+      }).catch(err => {
+        if (!progressWin.isDestroyed()) progressWin.close();
+        dialog.showErrorBox('更新失败', err.message);
+      });
+    });
   });
 }
 
@@ -955,13 +1063,8 @@ function callDeepSeekAPI(apiKey, body) {
       { label: '检查更新', click: async () => {
         const result = await checkForUpdate();
         if (result.error) { dialog.showErrorBox('检查更新', result.error); }
-        else if (result.hasUpdate) {
-          dialog.showMessageBox({
-            type: 'info', title: '发现新版本', buttons: ['前往下载', '稍后再说'],
-            message: `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`,
-            detail: result.releaseNotes || ''
-          }).then(({ response }) => { if (response === 0) shell.openExternal(result.downloadUrl); });
-        } else {
+        else if (result.hasUpdate) { doUpdate(result); }
+        else {
           dialog.showMessageBox({ type: 'info', title: '检查更新', message: `当前已是最新版本 (${result.currentVersion})`, buttons: ['确定'] });
         }
       }},
@@ -1024,6 +1127,10 @@ function callDeepSeekAPI(apiKey, body) {
 
   // 补丁更新
   ipcMain.handle('check-for-updates', async () => { return await checkForUpdate(); });
+
+  ipcMain.handle('do-update', (_, result) => {
+    doUpdate(result);
+  });
 
   ipcMain.handle('select-patch-file', async () => {
     const result = await dialog.showOpenDialog({
@@ -1100,13 +1207,7 @@ app.whenReady().then(() => {
   // 启动时静默检查更新
   setTimeout(async () => {
     const result = await checkForUpdate();
-    if (result.hasUpdate) {
-      dialog.showMessageBox({
-        type: 'info', title: '发现新版本', buttons: ['前往下载', '稍后再说'],
-        message: `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`,
-        detail: result.releaseNotes || ''
-      }).then(({ response }) => { if (response === 0) shell.openExternal(result.downloadUrl); });
-    }
+    if (result.hasUpdate) { doUpdate(result); }
   }, 3000);
 
   // 系统托盘
@@ -1123,13 +1224,8 @@ app.whenReady().then(() => {
       { label: '检查更新', click: async () => {
         const result = await checkForUpdate();
         if (result.error) { dialog.showErrorBox('检查更新', result.error); }
-        else if (result.hasUpdate) {
-          dialog.showMessageBox({
-            type: 'info', title: '发现新版本', buttons: ['前往下载', '稍后再说'],
-            message: `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`,
-            detail: result.releaseNotes || ''
-          }).then(({ response }) => { if (response === 0) shell.openExternal(result.downloadUrl); });
-        } else {
+        else if (result.hasUpdate) { doUpdate(result); }
+        else {
           dialog.showMessageBox({ type: 'info', title: '检查更新', message: `当前已是最新版本 (${result.currentVersion})`, buttons: ['确定'] });
         }
       }},

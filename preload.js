@@ -61,6 +61,7 @@ contextBridge.exposeInMainWorld('api', {
   selectPatchFile: () => ipcRenderer.invoke('select-patch-file'),
   applyPatch: (path) => ipcRenderer.invoke('apply-patch', path),
   checkForUpdate: () => ipcRenderer.invoke('check-for-updates'),
+  doUpdate: (result) => ipcRenderer.invoke('do-update', result),
   restartApp: () => ipcRenderer.send('restart-app'),
   openChatWithFile: (data) => ipcRenderer.send('open-chat-with-file', data),
 
