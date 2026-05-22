@@ -562,6 +562,51 @@ async function getWeather() {
   } catch { return '天气数据不可用'; }
 }
 
+function compareVersions(a, b) {
+  const pa = a.replace(/^v/, '').split('.').map(Number);
+  const pb = b.replace(/^v/, '').split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    if ((pa[i] || 0) > (pb[i] || 0)) return 1;
+    if ((pa[i] || 0) < (pb[i] || 0)) return -1;
+  }
+  return 0;
+}
+
+async function checkForUpdate() {
+  return new Promise((resolve) => {
+    const currentVersion = app.getVersion();
+    const opts = {
+      hostname: 'api.github.com',
+      path: '/repos/a1550506905-star/Epets/releases/latest',
+      headers: { 'User-Agent': 'Epets/' + currentVersion, 'Accept': 'application/vnd.github.v3+json' },
+      timeout: 10000
+    };
+    https.get(opts, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const release = JSON.parse(data);
+          if (release.tag_name && compareVersions(release.tag_name, currentVersion) > 0) {
+            resolve({
+              hasUpdate: true,
+              latestVersion: release.tag_name,
+              currentVersion: currentVersion,
+              downloadUrl: release.html_url || 'https://github.com/a1550506905-star/Epets/releases/latest',
+              releaseNotes: (release.body || '').slice(0, 500)
+            });
+          } else {
+            resolve({ hasUpdate: false, currentVersion: currentVersion });
+          }
+        } catch (e) {
+          resolve({ error: '解析更新信息失败' });
+        }
+      });
+    }).on('error', () => resolve({ error: '检查更新失败，请检查网络' }))
+      .on('timeout', function() { this.destroy(); resolve({ error: '检查更新超时' }); });
+  });
+}
+
 function setupIPC() {
   ipcMain.handle('get-pets', () => scanPets());
   ipcMain.handle('get-current-pet', (event) => {
@@ -907,6 +952,19 @@ function callDeepSeekAPI(apiKey, body) {
       { type: 'separator' },
       { label: '设置', click: () => { createSettingsWindow(); } },
       { label: '使用说明', click: () => { createAboutWindow(); } },
+      { label: '检查更新', click: async () => {
+        const result = await checkForUpdate();
+        if (result.error) { dialog.showErrorBox('检查更新', result.error); }
+        else if (result.hasUpdate) {
+          dialog.showMessageBox({
+            type: 'info', title: '发现新版本', buttons: ['前往下载', '稍后再说'],
+            message: `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`,
+            detail: result.releaseNotes || ''
+          }).then(({ response }) => { if (response === 0) shell.openExternal(result.downloadUrl); });
+        } else {
+          dialog.showMessageBox({ type: 'info', title: '检查更新', message: `当前已是最新版本 (${result.currentVersion})`, buttons: ['确定'] });
+        }
+      }},
       { type: 'separator' },
       { label: '关闭此宠物', click: () => {
         const win = petWindows[petId];
@@ -965,6 +1023,8 @@ function callDeepSeekAPI(apiKey, body) {
   });
 
   // 补丁更新
+  ipcMain.handle('check-for-updates', async () => { return await checkForUpdate(); });
+
   ipcMain.handle('select-patch-file', async () => {
     const result = await dialog.showOpenDialog({
       title: '选择补丁文件',
@@ -1037,6 +1097,18 @@ app.whenReady().then(() => {
   startClipboardMonitor();
   setInterval(() => { config.points = (config.points || 0) + 1; saveConfig(); }, 60000);
 
+  // 启动时静默检查更新
+  setTimeout(async () => {
+    const result = await checkForUpdate();
+    if (result.hasUpdate) {
+      dialog.showMessageBox({
+        type: 'info', title: '发现新版本', buttons: ['前往下载', '稍后再说'],
+        message: `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`,
+        detail: result.releaseNotes || ''
+      }).then(({ response }) => { if (response === 0) shell.openExternal(result.downloadUrl); });
+    }
+  }, 3000);
+
   // 系统托盘
   if (appIcon) {
     tray = new Tray(appIcon);
@@ -1048,6 +1120,19 @@ app.whenReady().then(() => {
       { label: '剪贴板历史', click: () => { createClipboardWindow(); } },
       { label: '设置', click: () => { createSettingsWindow(); } },
       { label: '使用说明', click: () => { createAboutWindow(); } },
+      { label: '检查更新', click: async () => {
+        const result = await checkForUpdate();
+        if (result.error) { dialog.showErrorBox('检查更新', result.error); }
+        else if (result.hasUpdate) {
+          dialog.showMessageBox({
+            type: 'info', title: '发现新版本', buttons: ['前往下载', '稍后再说'],
+            message: `发现新版本 ${result.latestVersion}（当前 ${result.currentVersion}）`,
+            detail: result.releaseNotes || ''
+          }).then(({ response }) => { if (response === 0) shell.openExternal(result.downloadUrl); });
+        } else {
+          dialog.showMessageBox({ type: 'info', title: '检查更新', message: `当前已是最新版本 (${result.currentVersion})`, buttons: ['确定'] });
+        }
+      }},
       { type: 'separator' },
       { label: '退出', click: () => { app.quit(); } }
     ]));
