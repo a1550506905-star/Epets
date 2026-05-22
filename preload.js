@@ -62,6 +62,10 @@ contextBridge.exposeInMainWorld('api', {
   applyPatch: (path) => ipcRenderer.invoke('apply-patch', path),
   checkForUpdate: () => ipcRenderer.invoke('check-for-updates'),
   doUpdate: (result) => ipcRenderer.invoke('do-update', result),
+  getFocusMode: () => ipcRenderer.invoke('get-focus-mode'),
+  setFocusMode: (hours) => ipcRenderer.invoke('set-focus-mode', hours),
+  cancelFocusMode: () => ipcRenderer.invoke('cancel-focus-mode'),
+  onFocusModeChanged: (callback) => { ipcRenderer.on('focus-mode-changed', (_, active) => callback(active)); },
   restartApp: () => ipcRenderer.send('restart-app'),
   openChatWithFile: (data) => ipcRenderer.send('open-chat-with-file', data),
 

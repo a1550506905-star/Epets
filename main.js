@@ -116,6 +116,53 @@ function getPetWindowFromEvent(event) {
   return null;
 }
 
+let focusModeUntil = null;
+let focusModeTimer = null;
+
+function setFocusMode(hours) {
+  focusModeUntil = Date.now() + hours * 3600000;
+  if (focusModeTimer) clearTimeout(focusModeTimer);
+  focusModeTimer = setTimeout(() => {
+    focusModeUntil = null;
+    broadcastToPets('focus-mode-changed', false);
+    if (rebuildTrayMenu) rebuildTrayMenu();
+  }, hours * 3600000);
+  broadcastToPets('focus-mode-changed', true);
+  if (rebuildTrayMenu) rebuildTrayMenu();
+}
+
+function cancelFocusMode() {
+  focusModeUntil = null;
+  if (focusModeTimer) { clearTimeout(focusModeTimer); focusModeTimer = null; }
+  broadcastToPets('focus-mode-changed', false);
+  if (rebuildTrayMenu) rebuildTrayMenu();
+}
+
+function getFocusModeRemaining() {
+  if (!focusModeUntil) return null;
+  const remaining = focusModeUntil - Date.now();
+  if (remaining <= 0) return null;
+  const h = Math.floor(remaining / 3600000);
+  const m = Math.floor((remaining % 3600000) / 60000);
+  return h + '小时' + (m > 0 ? m + '分钟' : '');
+}
+
+function buildFocusModeSubmenu() {
+  const remaining = getFocusModeRemaining();
+  if (remaining) {
+    return [
+      { label: '剩余 ' + remaining, enabled: false },
+      { type: 'separator' },
+      { label: '关闭专注模式', click: () => { cancelFocusMode(); } }
+    ];
+  }
+  return [
+    { label: '1小时', click: () => { setFocusMode(1); } },
+    { label: '2小时', click: () => { setFocusMode(2); } },
+    { label: '3小时', click: () => { setFocusMode(3); } }
+  ];
+}
+
 function broadcastToPets(channel, data) {
   for (const win of Object.values(petWindows)) {
     if (win && !win.isDestroyed()) win.webContents.send(channel, data);
@@ -274,7 +321,7 @@ let aboutWin = null;
 function createAboutWindow() {
   if (aboutWin && !aboutWin.isDestroyed()) { aboutWin.focus(); return; }
   aboutWin = new BrowserWindow({
-    width: 600, height: 820, resizable: true, center: true,
+    width: 1000, height: 920, resizable: true, center: true,
     frame: false,
     icon: appIcon,
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
@@ -1060,6 +1107,8 @@ function callDeepSeekAPI(apiKey, body) {
       { type: 'separator' },
       { label: '设置', click: () => { createSettingsWindow(); } },
       { label: '使用说明', click: () => { createAboutWindow(); } },
+      { type: 'separator' },
+      { label: '专注模式', submenu: buildFocusModeSubmenu() },
       { label: '检查更新', click: async () => {
         const result = await checkForUpdate();
         if (result.error) { dialog.showErrorBox('检查更新', result.error); }
@@ -1132,6 +1181,14 @@ function callDeepSeekAPI(apiKey, body) {
     doUpdate(result);
   });
 
+  ipcMain.handle('get-focus-mode', () => {
+    const remaining = getFocusModeRemaining();
+    return { active: !!remaining, remaining: remaining || '' };
+  });
+
+  ipcMain.handle('set-focus-mode', (_, hours) => { setFocusMode(hours); });
+  ipcMain.handle('cancel-focus-mode', () => { cancelFocusMode(); });
+
   ipcMain.handle('select-patch-file', async () => {
     const result = await dialog.showOpenDialog({
       title: '选择补丁文件',
@@ -1159,6 +1216,7 @@ function callDeepSeekAPI(apiKey, body) {
 }
 
 let tray = null;
+let rebuildTrayMenu = null;
 
 app.whenReady().then(() => {
   app.setAppUserModelId('deskpet');
@@ -1211,9 +1269,7 @@ app.whenReady().then(() => {
   }, 3000);
 
   // 系统托盘
-  if (appIcon) {
-    tray = new Tray(appIcon);
-    tray.setToolTip('桌面宠物');
+  function buildTrayMenu() {
     tray.setContextMenu(Menu.buildFromTemplate([
       { label: '添加角色', click: () => { createPetSelectorWindow('add'); } },
       { label: '角色商店', click: () => { createShopWindow(); } },
@@ -1221,6 +1277,8 @@ app.whenReady().then(() => {
       { label: '剪贴板历史', click: () => { createClipboardWindow(); } },
       { label: '设置', click: () => { createSettingsWindow(); } },
       { label: '使用说明', click: () => { createAboutWindow(); } },
+      { type: 'separator' },
+      { label: '专注模式', submenu: buildFocusModeSubmenu() },
       { label: '检查更新', click: async () => {
         const result = await checkForUpdate();
         if (result.error) { dialog.showErrorBox('检查更新', result.error); }
@@ -1232,6 +1290,13 @@ app.whenReady().then(() => {
       { type: 'separator' },
       { label: '退出', click: () => { app.quit(); } }
     ]));
+  }
+
+  if (appIcon) {
+    tray = new Tray(appIcon);
+    tray.setToolTip('桌面宠物');
+    rebuildTrayMenu = buildTrayMenu;
+    buildTrayMenu();
   }
 });
 app.on('window-all-closed', () => {});

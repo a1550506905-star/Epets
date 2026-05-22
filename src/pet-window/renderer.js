@@ -81,6 +81,8 @@ async function init() {
 
   lastTime = performance.now();
   requestAnimationFrame(animate);
+  const fm = await window.api.getFocusMode();
+  if (fm && fm.active) { focusMode = true; }
   scheduleNextBehavior();
   setupEvents();
   setupIpcListeners();
@@ -226,7 +228,7 @@ function scheduleNextBehavior() {
 function triggerBehavior() {
   if (isDragging) { scheduleNextBehavior(); return; }
 
-  if (Math.random() < 0.3) {
+  if (!focusMode && Math.random() < 0.3) {
     // 30% 概率跑动
     const dir = Math.random() < 0.5 ? -1 : 1;
     startRun(dir);
@@ -323,6 +325,9 @@ function setupEvents() {
 // ===== 聊天模式 =====
 let chatMode = false;
 
+// ===== 专注模式 =====
+let focusMode = false;
+
 // ===== IPC监听 =====
 function setupIpcListeners() {
   // 大小调整
@@ -359,6 +364,12 @@ function setupIpcListeners() {
   window.api.onChatClosed(() => {
     chatMode = false;
     scheduleNextBehavior();
+  });
+
+  // 专注模式变化
+  window.api.onFocusModeChanged((active) => {
+    focusMode = active;
+    if (!active) { isMoving = false; currentAnim = ANIM_IDLE; currentFrame = 0; scheduleNextBehavior(); }
   });
 
   // 收到聊天触发 → 随机播放一个非移动动画，播完回待机

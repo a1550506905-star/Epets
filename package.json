@@ -1,6 +1,6 @@
 {
   "name": "deskpet",
-  "version": "0.5.13",
+  "version": "0.5.14",
   "description": "Windows桌面宠物",
   "main": "main.js",
   "scripts": {
