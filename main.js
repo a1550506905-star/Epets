@@ -31,6 +31,7 @@ let clipboardHistory = [];
 let clipboardInterval = null;
 let config = {};
 let configPath = '';
+let quitting = false;
 
 function loadConfig() {
   const pets = scanPets();
@@ -51,12 +52,27 @@ function loadConfig() {
   }
 }
 
+function setAutoStartRegistry(enabled) {
+  const { exec } = require('child_process');
+  const key = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run';
+  const exePath = config.installPath || process.env.PORTABLE_EXECUTABLE_FILE || app.getPath('exe');
+  if (enabled) {
+    exec(`reg add "${key}" /v "Epets" /t REG_SZ /d "${exePath}" /f`, (err) => {
+      if (err) console.error('auto-start reg add failed:', err.message);
+    });
+  } else {
+    exec(`reg delete "${key}" /v "Epets" /f`, () => {});
+  }
+}
+
 function saveConfig() {
   if (!configPath) return;
+  try {
   // 加密 API Key
   const save = { ...config };
   if (save.apiKey) {
-    save.encryptedKey = safeStorage.encryptString(save.apiKey).toString('base64');
+    try { save.encryptedKey = safeStorage.encryptString(save.apiKey).toString('base64'); }
+    catch { save.encryptedKey = null; }
     delete save.apiKey;
   } else {
     save.encryptedKey = null;
@@ -66,6 +82,7 @@ function saveConfig() {
   save._sig = pointsSignature(save.points);
   config._sig = save._sig;
   fs.writeFileSync(configPath, JSON.stringify(save, null, 2));
+  } catch (e) { debugLog('saveConfig error: ' + e.message); }
 }
 
 function pointsSignature(points) {
@@ -235,18 +252,26 @@ function createPetWindow(petId, position) {
   win.webContents.on('console-message', (event, level, message) => {
     if (level === 3) debugLog('[pet-renderer ERROR] ' + message);
   });
+  function removePet() {
+    delete petWindows[petId];
+    activePets = activePets.filter(id => id !== petId);
+    if (!quitting) {
+      config.activePetIds = [...activePets];
+      config.currentPetId = activePets[0] || '';
+      saveConfig();
+    }
+  }
   win.webContents.on('render-process-gone', (event, details) => {
     debugLog('[pet-renderer CRASH] ' + details.reason);
-    delete petWindows[petId];
-    activePets = activePets.filter(id => id !== petId);
+    removePet();
   });
-  win.on('closed', () => {
-    delete petWindows[petId];
-    activePets = activePets.filter(id => id !== petId);
-  });
+  win.on('closed', () => { removePet(); });
 
   petWindows[petId] = win;
   if (!activePets.includes(petId)) activePets.push(petId);
+  config.activePetIds = [...activePets];
+  config.currentPetId = activePets[0] || '';
+  saveConfig();
   return win;
 }
 
@@ -888,7 +913,7 @@ function setupIPC() {
   ipcMain.handle('set-auto-start', (_, enabled) => {
     config.autoStart = !!enabled;
     saveConfig();
-    app.setLoginItemSettings({ openAtLogin: config.autoStart, args: [] });
+    setAutoStartRegistry(config.autoStart);
   });
   ipcMain.handle('get-pet-scale', (event) => {
     const petId = getPetFromEvent(event);
@@ -1235,11 +1260,14 @@ app.whenReady().then(() => {
   loadConfig();
   setupIPC();
 
+  // 记录原始 exe 路径（便携版环境变量只在运行时存在，需要持久化）
+  if (process.env.PORTABLE_EXECUTABLE_FILE && config.installPath !== process.env.PORTABLE_EXECUTABLE_FILE) {
+    config.installPath = process.env.PORTABLE_EXECUTABLE_FILE;
+    saveConfig();
+  }
+
   // 开机自启动
-  app.setLoginItemSettings({
-    openAtLogin: config.autoStart,
-    args: []
-  });
+  if (config.autoStart) setAutoStartRegistry(true);
 
   // 首次运行 → 打开使用说明
   if (config.firstRun) {
@@ -1301,6 +1329,7 @@ app.whenReady().then(() => {
 });
 app.on('window-all-closed', () => {});
 app.on('before-quit', () => {
+  quitting = true;
   config.currentPetId = activePets[0] || '';
   config.activePetIds = [...activePets];
   if (config.firstRun) config.firstRun = false;
@@ -1308,4 +1337,15 @@ app.on('before-quit', () => {
   if (clipboardInterval) clearInterval(clipboardInterval);
   saveClipboardHistory();
   if (tray) { tray.destroy(); tray = null; }
+});
+
+app.on('will-quit', () => {
+  // before-quit 可能在系统关机时来不及执行，will-quit 做最后兜底
+  if (!quitting) {
+    quitting = true;
+    config.currentPetId = activePets[0] || '';
+    config.activePetIds = [...activePets];
+    saveConfig();
+    saveClipboardHistory();
+  }
 });
