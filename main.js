@@ -356,6 +356,103 @@ function createAboutWindow() {
   aboutWin.on('closed', () => { aboutWin = null; });
 }
 
+// Schedule window
+let scheduleWin = null;
+let schedulePinned = false;
+
+function scheduleFilePath() { return path.join(app.getPath('userData'), 'schedule.json'); }
+function loadSchedule() { try { return JSON.parse(fs.readFileSync(scheduleFilePath(), 'utf-8')); } catch { return {}; } }
+function saveSchedule(data) { fs.writeFileSync(scheduleFilePath(), JSON.stringify(data, null, 2)); }
+
+function createScheduleWindow() {
+  if (scheduleWin && !scheduleWin.isDestroyed()) { scheduleWin.focus(); return; }
+  scheduleWin = new BrowserWindow({
+    width: 420, height: 620, resizable: true, center: true,
+    frame: false,
+    icon: appIcon,
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
+  });
+  scheduleWin.loadFile(path.join(__dirname, 'src', 'schedule', 'index.html'));
+  scheduleWin.setMenuBarVisibility(false);
+  scheduleWin.setAlwaysOnTop(schedulePinned, 'normal');
+  scheduleWin.on('closed', () => { scheduleWin = null; });
+  scheduleWin.on('blur', () => { if (schedulePinned && scheduleWin && !scheduleWin.isDestroyed()) scheduleWin.setOpacity(0.35); });
+  scheduleWin.on('focus', () => { if (scheduleWin && !scheduleWin.isDestroyed()) scheduleWin.setOpacity(1.0); });
+}
+
+// Schedule editor window
+let scheduleEditorWin = null;
+function createScheduleEditorWindow() {
+  if (scheduleEditorWin && !scheduleEditorWin.isDestroyed()) { scheduleEditorWin.focus(); return; }
+  scheduleEditorWin = new BrowserWindow({
+    width: 1000, height: 700, resizable: true, center: true,
+    frame: false,
+    icon: appIcon,
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
+  });
+  scheduleEditorWin.loadFile(path.join(__dirname, 'src', 'schedule', 'editor.html'));
+  scheduleEditorWin.setMenuBarVisibility(false);
+  scheduleEditorWin.on('closed', () => { scheduleEditorWin = null; });
+}
+
+// AI Summary generator
+async function generateAISummaryForDate(date, characterId) {
+  const all = loadSchedule();
+  const dayData = all[date];
+  if (!dayData || !dayData.tasks || dayData.tasks.length === 0) return { error: '该日期无任务' };
+
+  const apiKey = config.apiKey;
+  if (!apiKey) return { error: '请先设置 DeepSeek API Key' };
+
+  const pet = loadPet(characterId);
+  const charName = pet ? (pet.displayName || pet.id) : 'AI助手';
+  const tasks = dayData.tasks.map(t => `- ${t.done ? '✓' : '✗'} ${t.text}${t.doneAt ? ' (完成于 ' + new Date(t.doneAt).toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) + ')' : ''}`).join('\n');
+  const userSummary = dayData.summary || '无';
+
+  const systemPrompt = pet
+    ? `你是${charName}，你是用户的桌面宠物朋友。请以你的角色性格和口吻来总结用户的一天。保持简短（200字内），语气温暖亲切。`
+    : `你是用户的AI助手，请简洁总结用户的一天（200字内）。`;
+
+  const userPrompt = `这是我的今日总结：\n${userSummary}\n\n以下是我今天完成的任务列表：\n${tasks}\n\n请以你的口吻给我写一段今日回顾和小结。`;
+
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const body = JSON.stringify({
+        model: 'deepseek-chat', messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ], stream: false, temperature: 0.8, max_tokens: 400
+      });
+      const req = https.request({
+        hostname: 'api.deepseek.com', port: 443, path: '/v1/chat/completions', method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`, 'Content-Length': Buffer.byteLength(body) },
+        timeout: 30000
+      }, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.error) reject(new Error(parsed.error.message));
+            else resolve(parsed.choices[0].message.content);
+          } catch (e) { reject(e); }
+        });
+      });
+      req.on('error', reject);
+      req.on('timeout', () => { req.destroy(); reject(new Error('超时')); });
+      req.write(body);
+      req.end();
+    });
+
+    all[date].aiSummary = result;
+    all[date].aiCharName = charName;
+    saveSchedule(all);
+    return { success: true, summary: result, charName };
+  } catch (e) {
+    return { error: e.message };
+  }
+}
+
 // Shop window
 let shopWin = null;
 function createShopWindow() {
@@ -1128,6 +1225,7 @@ function callDeepSeekAPI(apiKey, body) {
       })},
       { type: 'separator' },
       { label: '剪贴板历史', click: () => { createClipboardWindow(); } },
+      { label: '日程表', click: () => { createScheduleWindow(); } },
       { label: '打开暂存文件夹', click: () => { shell.openPath(STASH_DIR); } },
       { type: 'separator' },
       { label: '设置', click: () => { createSettingsWindow(); } },
@@ -1214,6 +1312,131 @@ function callDeepSeekAPI(apiKey, body) {
   ipcMain.handle('set-focus-mode', (_, hours) => { setFocusMode(hours); });
   ipcMain.handle('cancel-focus-mode', () => { cancelFocusMode(); });
 
+  // 日程表
+  ipcMain.handle('get-schedule', (_, date) => {
+    const all = loadSchedule();
+    return all[date] || { tasks: [], summary: '' };
+  });
+
+  ipcMain.handle('add-schedule-task', (_, date, text) => {
+    const all = loadSchedule();
+    if (!all[date]) all[date] = { tasks: [], summary: '' };
+    all[date].tasks.push({ id: Date.now().toString(36), text, done: false, doneAt: null });
+    saveSchedule(all);
+  });
+
+  ipcMain.handle('toggle-schedule-task', (_, date, taskId) => {
+    const all = loadSchedule();
+    const tasks = (all[date] || {}).tasks || [];
+    const t = tasks.find(x => x.id === taskId);
+    if (t) {
+      t.done = !t.done;
+      t.doneAt = t.done ? new Date().toISOString() : null;
+      saveSchedule(all);
+    }
+    return t ? t.done : false;
+  });
+
+  ipcMain.handle('delete-schedule-task', (_, date, taskId) => {
+    const all = loadSchedule();
+    if (all[date]) all[date].tasks = (all[date].tasks || []).filter(x => x.id !== taskId);
+    saveSchedule(all);
+  });
+
+  ipcMain.handle('save-schedule-summary', (_, date, summary) => {
+    const all = loadSchedule();
+    if (!all[date]) all[date] = { tasks: [], summary: '' };
+    all[date].summary = summary;
+    saveSchedule(all);
+  });
+
+  ipcMain.handle('open-schedule-editor', () => { createScheduleEditorWindow(); });
+
+  ipcMain.handle('get-schedule-pinned', () => schedulePinned);
+  ipcMain.handle('set-schedule-pinned', (_, p) => {
+    schedulePinned = p;
+    if (scheduleWin && !scheduleWin.isDestroyed()) scheduleWin.setAlwaysOnTop(p, 'normal');
+  });
+
+  ipcMain.handle('set-schedule-opacity', (_, opacity) => {
+    if (scheduleWin && !scheduleWin.isDestroyed()) scheduleWin.setOpacity(opacity);
+  });
+
+  ipcMain.handle('notify-schedule-changed', () => {
+    if (scheduleWin && !scheduleWin.isDestroyed()) scheduleWin.webContents.send('schedule-changed');
+  });
+
+  ipcMain.handle('generate-ai-summary', async (_, date, characterId) => {
+    return await generateAISummaryForDate(date, characterId);
+  });
+
+  ipcMain.handle('get-config', () => {
+    return { summaryCharacterId: config.summaryCharacterId || '' };
+  });
+
+  ipcMain.handle('set-config-key', (_, key, value) => {
+    config[key] = value;
+    saveConfig();
+  });
+
+  ipcMain.handle('check-daily-summary', async () => {
+    const now = new Date();
+    if (now.getHours() < 4) return null; // 还没到凌晨4点
+    const config = loadSchedule();
+    const today = now.toISOString().slice(0, 10);
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    if (config._lastSummaryCheck === today) return null; // 今天已检查过了
+    config._lastSummaryCheck = today;
+    saveSchedule(config);
+
+    const yesterdayData = config[yesterdayStr];
+    if (!yesterdayData || !yesterdayData.tasks || yesterdayData.tasks.length === 0) return null;
+
+    const doneTasks = yesterdayData.tasks.filter(t => t.done);
+    const undoneTasks = yesterdayData.tasks.filter(t => !t.done);
+    const manualSummary = yesterdayData.summary || '';
+    const totalTasks = yesterdayData.tasks.length;
+
+    return {
+      date: yesterdayStr,
+      totalTasks,
+      doneCount: doneTasks.length,
+      undoneCount: undoneTasks.length,
+      manualSummary,
+      tasks: yesterdayData.tasks.map(t => ({ text: t.text, done: t.done }))
+    };
+  });
+
+  ipcMain.handle('get-weekly-data', () => {
+    const all = loadSchedule();
+    const now = new Date();
+    if (now.getHours() < 4) now.setDate(now.getDate() - 1);
+    const dayOfWeek = now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1));
+    const weekData = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const ds = d.toISOString().slice(0, 10);
+      const dayInfo = all[ds] || { tasks: [], summary: '' };
+      weekData.push({
+        date: ds,
+        tasks: dayInfo.tasks || [],
+        summary: dayInfo.summary || '',
+        allDone: (dayInfo.tasks || []).length > 0 && (dayInfo.tasks || []).every(t => t.done)
+      });
+    }
+    const pastDays = weekData.filter(w => w.date <= now.toISOString().slice(0, 10));
+    const total = pastDays.reduce((s, d) => s + d.tasks.length, 0);
+    const done = pastDays.reduce((s, d) => s + d.tasks.filter(t => t.done).length, 0);
+    const summaries = pastDays.filter(d => d.summary).map(d => d.date + ': ' + d.summary);
+    return { days: weekData, total, done, summaries, isWeekEnd: dayOfWeek === 0 || dayOfWeek > 5 };
+  });
+
   ipcMain.handle('select-patch-file', async () => {
     const result = await dialog.showOpenDialog({
       title: '选择补丁文件',
@@ -1290,6 +1513,104 @@ app.whenReady().then(() => {
   startClipboardMonitor();
   setInterval(() => { config.points = (config.points || 0) + 1; saveConfig(); }, 60000);
 
+  // 启动时检查日程表（凌晨四点后用角色聊天窗口弹出总结）
+  setTimeout(async () => {
+    const now = new Date();
+    if (now.getHours() < 4) return;
+    const all = loadSchedule();
+    const today = now.toISOString().slice(0, 10);
+    if (all._lastSummaryCheck === today) return;
+    all._lastSummaryCheck = today;
+    saveSchedule(all);
+
+    const y = new Date(now); y.setDate(y.getDate() - 1);
+    const yesterdayStr = y.toISOString().slice(0, 10);
+    const yesterdayData = all[yesterdayStr];
+    const hasYesterdayData = yesterdayData && yesterdayData.tasks && yesterdayData.tasks.length > 0;
+
+    // 周一检查是否需要周总结
+    const isMonday = now.getDay() === 1;
+    let weeklyInfo = null;
+    if (isMonday) {
+      const lastMon = new Date(now); lastMon.setDate(now.getDate() - 7);
+      const lastSun = new Date(now); lastSun.setDate(now.getDate() - 1);
+      let total = 0, done = 0;
+      for (let d = new Date(lastMon); d <= lastSun; d.setDate(d.getDate() + 1)) {
+        const ds = d.toISOString().slice(0, 10);
+        const dd = all[ds];
+        if (dd && dd.tasks) { total += dd.tasks.length; done += dd.tasks.filter(t => t.done).length; }
+      }
+      if (total > 0) {
+        const prevMon = new Date(lastMon); prevMon.setDate(prevMon.getDate() - 7);
+        const prevSun = new Date(lastSun); prevSun.setDate(prevSun.getDate() - 7);
+        let prevTotal = 0, prevDone = 0;
+        for (let d = new Date(prevMon); d <= prevSun; d.setDate(d.getDate() + 1)) {
+          const ds = d.toISOString().slice(0, 10);
+          const dd = all[ds];
+          if (dd && dd.tasks) { prevTotal += dd.tasks.length; prevDone += dd.tasks.filter(t => t.done).length; }
+        }
+        weeklyInfo = { total, done, prevTotal, prevDone };
+      }
+    }
+
+    if (!hasYesterdayData && !weeklyInfo) return;
+
+    // 确定用哪个角色
+    const charId = config.summaryCharacterId;
+    const pet = charId ? loadPet(charId) : null;
+
+    // 生成 AI 总结
+    let yesterdaySummary = '';
+    if (hasYesterdayData && pet && config.apiKey) {
+      const r = await generateAISummaryForDate(yesterdayStr, charId);
+      if (r.success) { yesterdayData.aiSummary = r.summary; yesterdaySummary = r.summary; }
+    }
+
+    // 构建聊天消息
+    let chatMsg = '';
+    if (hasYesterdayData) {
+      const doneCount = yesterdayData.tasks.filter(t => t.done).length;
+      const total = yesterdayData.tasks.length;
+      chatMsg = `早上好！让我来回顾一下昨天~\n\n📋 昨日任务完成情况：${doneCount}/${total}\n`;
+      chatMsg += yesterdayData.tasks.map(t => `  ${t.done ? '✅' : '⬜'} ${t.text}`).join('\n');
+      if (yesterdaySummary) {
+        chatMsg += '\n\n' + yesterdaySummary;
+      } else if (yesterdayData.summary) {
+        chatMsg += '\n\n📝 你的总结：' + yesterdayData.summary;
+      }
+    }
+    if (weeklyInfo) {
+      if (chatMsg) chatMsg += '\n\n━━━━━━━━━━━━\n\n';
+      chatMsg += `📊 上周总结\n完成 ${weeklyInfo.done}/${weeklyInfo.total} 项任务`;
+      if (weeklyInfo.prevTotal > 0) {
+        const diff = weeklyInfo.done - weeklyInfo.prevDone;
+        const rateNow = (weeklyInfo.done / weeklyInfo.total * 100).toFixed(0);
+        const ratePrev = (weeklyInfo.prevDone / weeklyInfo.prevTotal * 100).toFixed(0);
+        chatMsg += `\n完成率：${rateNow}% vs 上上周 ${ratePrev}%`;
+        chatMsg += `\n${diff > 0 ? '🎉 比上上周多完成了 ' + diff + ' 项，继续保持！' : diff < 0 ? '💪 比上上周少完成了 ' + Math.abs(diff) + ' 项，这周加油！' : '📌 跟上上周持平'}`;
+      }
+    }
+
+    // 如果选定了角色且有API Key，通过角色聊天窗口发送
+    if (pet && config.apiKey && chatMsg) {
+      // 保存到聊天历史
+      const chatPath = path.join(app.getPath('userData'), 'chat_' + pet.id + '.json');
+      let history = [];
+      try { history = JSON.parse(fs.readFileSync(chatPath, 'utf-8')); } catch {}
+      history.push({ role: 'assistant', content: chatMsg });
+      try { fs.writeFileSync(chatPath, JSON.stringify(history, null, 2)); } catch {}
+
+      // 打开聊天窗口
+      createChatWindow(pet, null);
+
+      // 触发宠物说话动画
+      setTimeout(() => {
+        const win = petWindows[pet.id];
+        if (win && !win.isDestroyed()) win.webContents.send('trigger-talk-anim');
+      }, 800);
+    }
+  }, 5000);
+
   // 启动时静默检查更新
   setTimeout(async () => {
     const result = await checkForUpdate();
@@ -1303,6 +1624,7 @@ app.whenReady().then(() => {
       { label: '角色商店', click: () => { createShopWindow(); } },
       { type: 'separator' },
       { label: '剪贴板历史', click: () => { createClipboardWindow(); } },
+      { label: '日程表', click: () => { createScheduleWindow(); } },
       { label: '设置', click: () => { createSettingsWindow(); } },
       { label: '使用说明', click: () => { createAboutWindow(); } },
       { type: 'separator' },

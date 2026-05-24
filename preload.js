@@ -77,6 +77,23 @@ contextBridge.exposeInMainWorld('api', {
   readFileContent: (filePath) => ipcRenderer.invoke('read-file-content', filePath),
   openStashFolder: () => ipcRenderer.invoke('open-stash-folder'),
 
+  // 日程表
+  getSchedule: (date) => ipcRenderer.invoke('get-schedule', date),
+  addScheduleTask: (date, text) => ipcRenderer.invoke('add-schedule-task', date, text),
+  toggleScheduleTask: (date, taskId) => ipcRenderer.invoke('toggle-schedule-task', date, taskId),
+  deleteScheduleTask: (date, taskId) => ipcRenderer.invoke('delete-schedule-task', date, taskId),
+  saveScheduleSummary: (date, summary) => ipcRenderer.invoke('save-schedule-summary', date, summary),
+  getSchedulePinned: () => ipcRenderer.invoke('get-schedule-pinned'),
+  setSchedulePinned: (pinned) => ipcRenderer.invoke('set-schedule-pinned', pinned),
+  setScheduleOpacity: (opacity) => ipcRenderer.invoke('set-schedule-opacity', opacity),
+  openScheduleEditor: () => ipcRenderer.invoke('open-schedule-editor'),
+  generateAISummary: (date, characterId) => ipcRenderer.invoke('generate-ai-summary', date, characterId),
+  notifyScheduleChanged: () => ipcRenderer.invoke('notify-schedule-changed'),
+  onScheduleChanged: (callback) => { ipcRenderer.on('schedule-changed', () => callback()); },
+  getConfig: () => ipcRenderer.invoke('get-config'),
+  setConfigKey: (key, value) => ipcRenderer.invoke('set-config-key', key, value),
+  getWeeklyData: () => ipcRenderer.invoke('get-weekly-data'),
+
   // 菜单事件
   onShowClipboard: (callback) => { ipcRenderer.on('show-clipboard', () => callback()); },
   onShowSettings: (callback) => { ipcRenderer.on('show-settings', () => callback()); },
